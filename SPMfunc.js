@@ -1,7 +1,7 @@
 ///////////////////// functions //////////////////////////////
 
 // FILL - creates feature collection of values extracted from pts for each image in a collection
-exports.Fill = function(img, ini) {
+var Fill = function(img, ini) {
   // type cast
   var inift = ee.FeatureCollection(ini)
   // gets the values for the points in the current img
