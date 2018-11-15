@@ -68,7 +68,7 @@ Map.addLayer(cImg, {'bands' :['B4','B3','B2'], min: [0,0,0], max: [2000,2000,200
 Map.addLayer(cImg, {'bands' :['B2','B4','B8'], min: [0,0,0], max: [2000,2000,2000]}, 'Çlear visual of SPM');
 
 // compute spm, cast to feature collection that is to be printed to table
-var spmCol = trueC.map(tools.ComputeSPM);
+var spmCol = trueC.map(ComputeSPM);
 
 // iterate over every image, adding the fill function's returned value to the empty feature collection ft
 // this is slower, iterate requires single computer computation rather than parallel computing
