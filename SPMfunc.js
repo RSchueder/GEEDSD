@@ -23,7 +23,7 @@ var Bp = 1.74
 var Cp = 0.1728
 // SPM = (Ap * pw)/(1-pw/Cp) + Bp
 var scal = 1/10000
-exports.ComputeSPM = function(img) {
+var ComputeSPM = function(img) {
   return img.expression(
   '(Ap * B4*(scal))/(1-(B4*(scal))/Cp) + Bp', {
   'B4': img.select('B4'),

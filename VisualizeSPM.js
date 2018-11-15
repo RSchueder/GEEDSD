@@ -10,7 +10,6 @@ var pts = ee.FeatureCollection(ee.List([
 var ft = ee.FeatureCollection(ee.List([]))
 ///////////////////// functions //////////////////////////////
 
-var tools = require('users/rudyschueder/default:DSD/SPMfunc')
 
 // FILL - creates feature collection of values extracted from pts for each image in a collection
 var Fill = function(img, ini) {
@@ -28,6 +27,23 @@ var Fill = function(img, ini) {
   return inift.merge(ft3)
 }
 
+// COMPUTESPM - computes spm concentrations from band reflectance
+// use 665nm (S2 band B4), from Nechad et al. (2010) Table 4
+var Ap = 355.85
+var Bp = 1.74
+var Cp = 0.1728
+// SPM = (Ap * pw)/(1-pw/Cp) + Bp
+var scal = 1/10000
+var ComputeSPM = function(img) {
+  return img.expression(
+  '(Ap * B4*(scal))/(1-(B4*(scal))/Cp) + Bp', {
+  'B4': img.select('B4'),
+  'Ap' : Ap,
+  'Bp' : Bp,
+  'Cp' : Cp,
+  'scal' : scal});
+  };
+
 ///////////////////// filter //////////////////////////////
 
 var start_date = ee.Date('2016-01-01') 
@@ -37,10 +53,7 @@ var imgNo = ee.Number(3);
 ////////////////////// begin processing ///////////////////////
 
 var collection = data
-              .filterBounds(pt1)
-              .filterBounds(pt2)
-              .filterBounds(pt3)
-              .filterBounds(pt4)
+              .filterBounds(poly)
               //.filterBounds(ee.Geometry(Map.getBounds(true)).centroid(1))
               .filterDate(start_date, end_date)
               .filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than',10);
